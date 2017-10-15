@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
-    <ChessGame />
+    <ChessGame fen="r2qr1k1/pBp2ppp/5n2/2b5/2bn3Q/5N2/PPPP1PPP/RNB2RK1 b - - 0 14"
+     view-from="black"></ChessGame>
     <h1>{{ msg }}</h1>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>

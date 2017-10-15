@@ -3,7 +3,8 @@
     <h3>{{ msg }}</h3>
     <div class="game chess">
       <div class="board">
-        <div class="piece black knight" />
+        <div v-for="piece in pieces" class="piece" v-bind:class="[piece.color, piece.type]"
+          v-bind:style="{ transform: 'translate(' + piece.file * 64 + 'px, ' + piece.rank * 64 + 'px)' }"></div>
       </div>
     </div>
   </div>
@@ -12,10 +13,72 @@
 <script>
 export default {
   name: "ChessGame",
+  props: ["fen", "viewFrom"],
   data() {
     return {
+      board: [],
       msg: "This is a chess board"
     };
+  },
+  created: function() {
+    this.board = [];
+    var fen = this.fen.split(" ");
+    var pieces = fen[0];
+    var rank = 8;
+    var file = 0;
+    var currentRank = [];
+    for (var i = 0; i < pieces.length; i++) {
+      var ch = pieces.charAt(i);
+      if (ch == "/") {
+        rank--;
+        file = 0;
+        this.board.push(currentRank);
+        currentRank = [];
+      } else if (ch >= "0" && ch <= "9") {
+        var emptyCount = Number(ch);
+        for (var empty = 0; empty < emptyCount; empty++) {
+          currentRank.push(null);
+        }
+      } else {
+        var black = ch >= "a" && ch <= "z";
+        var pieceTypes = {
+          r: "rook",
+          n: "knight",
+          b: "bishop",
+          q: "queen",
+          k: "king",
+          p: "pawn"
+        };
+        currentRank.push({
+          color: black ? "black" : "white",
+          type: pieceTypes[ch.toLowerCase()]
+        });
+      }
+    }
+    this.board.push(currentRank);
+  },
+  computed: {
+    pieces: function() {
+      var viewFromWhite = this.viewFrom !== "black";
+      var result = [];
+      for (var rankIndex = 0; rankIndex < 8; rankIndex++) {
+        for (var file = 0; file < 8; file++) {
+          var rank = this.board[rankIndex];
+          var piece = rank[file];
+          if (piece) {
+            result.push({
+              rank: viewFromWhite ? rankIndex : 7 - rankIndex,
+              file: viewFromWhite ? file : 7 - file,
+              color: piece.color,
+              type: piece.type
+            });
+          } else {
+            console.log("Undefined piece at " + rankIndex + ", " + file);
+          }
+        }
+      }
+      return result;
+    }
   }
 };
 </script>
@@ -32,10 +95,11 @@ export default {
   background-image: url('../assets/chess/board.svg');
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .piece {
-  position: relative;
+  position: absolute;
   background-size: cover;
   top: 0;
   left: 0;
@@ -46,7 +110,6 @@ export default {
 
 .black.rook {
   background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05IDM5aDI3di0zSDl2M3ptMy41LTdsMS41LTIuNWgxN2wxLjUgMi41aC0yMHptLS41IDR2LTRoMjF2NEgxMnoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTE0IDI5LjV2LTEzaDE3djEzSDE0eiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMTQgMTYuNUwxMSAxNGgyM2wtMyAyLjVIMTR6TTExIDE0VjloNHYyaDVWOWg1djJoNVY5aDR2NUgxMXoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTEyIDM1LjVoMjFtLTIwLTRoMTltLTE4LTJoMTdtLTE3LTEzaDE3TTExIDE0aDIzIiBmaWxsPSJub25lIiBzdHJva2U9IiNlY2VjZWMiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvZz48L3N2Zz4=');
-  transform: translate(64px, 64px);
 }
 
 .black.knight {
