@@ -103,8 +103,8 @@ export default {
   background-size: cover;
   top: 0;
   left: 0;
-  width: 12.5%;
-  height: 12.5%;
+  width: 64px;
+  height: 64px;
   z-index: 2;
 }
 
