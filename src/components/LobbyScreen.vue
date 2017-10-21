@@ -41,14 +41,7 @@ export default {
     var customActions = {
       list: { method: "GET", url: this.game },
       createGame: { method: "POST", url: this.game },
-      summary: { method: "GET", url: this.game + "{/gameId}" },
-      join: { method: "POST", url: this.game + "{/gameId}/join" },
-      details: { method: "GET", url: this.game + "{/gameId}/details" },
-      start: { method: "POST", url: this.game + "{/gameId}/start" },
-      action: {
-        method: "POST",
-        url: this.game + "{/gameId}/actions{/type}?token={token}"
-      }
+      join: { method: "POST", url: this.game + "{/gameId}/join" }
     };
 
     this.games = this.$resource(this.game, {}, customActions);

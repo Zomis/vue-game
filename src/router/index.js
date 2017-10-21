@@ -40,10 +40,11 @@ export default new Router({
       component: FlexGame,
       props: route => ({
         id: route.params.id,
-        q: route.query.q,
-        createScreen: CreateFlexGame,
+        token: route.query.token,
+        game: "ttt"
+        /*        createScreen: CreateFlexGame,
         preGame: PreFlexGame,
-        game: FlexGame
+        game: FlexGame*/
       })
     }
   ]
