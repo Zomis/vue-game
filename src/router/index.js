@@ -6,8 +6,12 @@ import FlexGame from "@/components/FlexGame";
 import LobbyScreen from "@/components/LobbyScreen";
 import CreateFlexGame from "@/components/CreateFlexGame";
 import PreFlexGame from "@/components/PreFlexGame";
+import VueResource from "vue-resource";
 
 Vue.use(Router);
+Vue.use(VueResource);
+Vue.http.options.root = "http://127.0.0.1:8081/games2";
+// Vue.http.headers.common["Authorization"] = "Basic XXXXXXXXX";
 
 export default new Router({
   routes: [

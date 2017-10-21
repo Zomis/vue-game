@@ -18,6 +18,19 @@ export default {
       name: "",
       msg: "Choose your game"
     };
+  },
+  created: function() {
+    this.$http.get("http://127.0.0.1:8081/games2").then(
+      response => {
+        console.log(response.body);
+        this.games = response.body;
+      },
+      err => {
+        // error callback
+        this.games = [];
+        console.log("Unable to fetch");
+      }
+    );
   }
 };
 </script>

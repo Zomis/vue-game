@@ -1,10 +1,15 @@
 <template>
   <div class="hello">
-    This is the lobby. Your name is {{ name }}
+    <p>This is the lobby. Your name is {{ name }}</p>
+    <div class="running-games">
+
+    </div>
   </div>
 </template>
 
 <script>
+import VueResource from "vue-resource";
+
 export default {
   name: "LobbyScreen",
   props: ["name"],
