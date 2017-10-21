@@ -6,6 +6,8 @@ import FlexGame from "@/components/FlexGame";
 import LobbyScreen from "@/components/LobbyScreen";
 import CreateFlexGame from "@/components/CreateFlexGame";
 import PreFlexGame from "@/components/PreFlexGame";
+import GridView from "@/components/views/GridView";
+import TTTView from "@/components/ttt/TTTView";
 import VueResource from "vue-resource";
 
 Vue.use(Router);
@@ -41,7 +43,8 @@ export default new Router({
       props: route => ({
         id: route.params.id,
         token: route.query.token,
-        game: "ttt"
+        game: "ttt",
+        view: TTTView
         /*        createScreen: CreateFlexGame,
         preGame: PreFlexGame,
         game: FlexGame*/
