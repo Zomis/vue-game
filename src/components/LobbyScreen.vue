@@ -5,6 +5,7 @@
       <p>There are {{ gamesRunning.games.length }} games running</p>
       <div class="running-game" v-for="game in gamesRunning.games">
         {{ game }}
+        <button v-if="!game.started" @click="join(game.id)" class="unstarted-game">Join!</button>
       </div>
     </div>
     <div class="joinable-games">
@@ -24,6 +25,20 @@ export default {
   name: "LobbyScreen",
   props: ["name", "game"],
   methods: {
+    join: function(gameId) {
+      this.games.join({ gameId: gameId }, { playerName: this.name }).then(
+        response => {
+          console.log(response.body);
+          if (response.body.privateKey) {
+            let gameURL = "/" + this.game + "/" + gameId;
+            this.$router.push(gameURL + "?token=" + response.body.privateKey);
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     createGame: function() {
       this.games.createGame({ playerName: this.name }).then(
         response => {
