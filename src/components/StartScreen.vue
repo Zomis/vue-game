@@ -20,7 +20,7 @@ export default {
     };
   },
   created: function() {
-    this.$http.get("http://127.0.0.1:8081/games2").then(
+    this.$http.get(".").then(
       response => {
         console.log(response.body);
         this.games = response.body;
