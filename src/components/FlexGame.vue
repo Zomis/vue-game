@@ -2,15 +2,14 @@
   <div>
     <h3>Game {{ game }}/{{ id }}</h3>
     <div class="general-info">
-      <p>token is {{ token }}</p>
       <p>{{ summary }}</p>
-      <p>{{ details }}</p>
     </div>
     <div class="awaiting-start" v-if="!summary.started">
       Game is not started yet.
     </div>
     <div class="game flex" v-if="summary.started">
-      <component v-bind:is="view" v-bind:details="details" ></component>
+      <component :is="view" :games="games" :gameId="id"
+       :token="token" ></component>
     </div>
   </div>
 </template>
@@ -44,12 +43,6 @@ export default {
       err => {
         console.log(err);
       }
-    );
-    this.games.details({ gameId: this.id }).then(
-      response => {
-        this.details = response.body;
-      },
-      err => console.log(err)
     );
   },
   computed: {}
