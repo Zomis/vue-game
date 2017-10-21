@@ -3,6 +3,7 @@ import Router from "vue-router";
 import StartScreen from "@/components/StartScreen";
 import HelloWorld from "@/components/HelloWorld";
 import FlexGame from "@/components/FlexGame";
+import LobbyScreen from "@/components/LobbyScreen";
 import CreateFlexGame from "@/components/CreateFlexGame";
 import PreFlexGame from "@/components/PreFlexGame";
 
@@ -21,8 +22,17 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path: "/ttt/:id",
+      path: "/ttt",
       name: "TicTacToe",
+      component: LobbyScreen,
+      props: route => ({
+        name: route.query.name,
+        game: "ttt"
+      })
+    },
+    {
+      path: "/ttt/:id",
+      name: "TicTacToeGame",
       component: FlexGame,
       props: route => ({
         id: route.params.id,
