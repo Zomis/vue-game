@@ -2,6 +2,15 @@
   <div class="hello">
     <p>This is the lobby. Your name is {{ name }}</p>
     <div class="running-games">
+      <p>There are {{ gamesRunning.games.length }} games running</p>
+      <div class="running-game" v-for="game in gamesRunning.games">
+        {{ game }}
+      </div>
+    </div>
+    <div class="joinable-games">
+
+    </div>
+    <div class="recently-finished">
 
     </div>
   </div>
@@ -12,9 +21,37 @@ import VueResource from "vue-resource";
 
 export default {
   name: "LobbyScreen",
-  props: ["name"],
+  props: ["name", "game"],
+  methods: {
+    getGames: function() {}
+  },
+  created: function() {
+    var customActions = {
+      list: { method: "GET", url: this.game },
+      createGame: { method: "POST", url: this.game },
+      summary: { method: "GET", url: this.game + "{/gameId}" },
+      join: { method: "POST", url: this.game + "{/gameId}/join" },
+      details: { method: "GET", url: this.game + "{/gameId}/details" },
+      start: { method: "POST", url: this.game + "{/gameId}/start" },
+      action: {
+        method: "POST",
+        url: this.game + "{/gameId}/actions{/type}?token={token}"
+      }
+    };
+
+    this.games = this.$resource(this.game, {}, customActions);
+    this.games.list({}).then(
+      response => {
+        this.gamesRunning = response.body;
+      },
+      err => {
+        console.log("Error: " + err);
+      }
+    );
+  },
   data() {
     return {
+      gamesRunning: { games: [] },
       msg: "Welcome to Your Vue.js App"
     };
   }
