@@ -8,11 +8,12 @@
       </div>
     </div>
     <div class="joinable-games">
-
+      <p>All games at the moment show up at running-games</p>
     </div>
     <div class="recently-finished">
 
     </div>
+    <button v-on:click="createGame()">Create new game</button>
   </div>
 </template>
 
@@ -23,7 +24,18 @@ export default {
   name: "LobbyScreen",
   props: ["name", "game"],
   methods: {
-    getGames: function() {}
+    createGame: function() {
+      this.games.createGame({ playerName: this.name }).then(
+        response => {
+          console.log(response.body);
+          let gameURL = "/" + this.game + "/" + response.body.gameId;
+          this.$router.push(gameURL + "?token=" + response.body.privateKey);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
   },
   created: function() {
     var customActions = {
