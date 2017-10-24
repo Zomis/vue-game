@@ -4,8 +4,7 @@
     <input v-model="name" placeholder="your name" />
     <ul class="gamelist">
       <li><router-link to="/chess">Chess</router-link></li>
-      <li><router-link :to="{ path: '/ttt/0', params: { id: 'xyz' } }">Tic Tac Toe game 0</router-link></li>
-      <li><router-link :to="'/ttt?name=' + name">Tic Tac Toe</router-link></li>
+      <li v-for="game in games"><router-link :to="'/' + game + '?name=' + name">{{ game }}</router-link></li>
     </ul>
   </div>
 </template>
@@ -16,6 +15,7 @@ export default {
   data() {
     return {
       name: "",
+      games: [],
       msg: "Choose your game"
     };
   },
