@@ -12,7 +12,16 @@ import VueResource from "vue-resource";
 
 Vue.use(Router);
 Vue.use(VueResource);
+
+var url = new URL(window.location.href);
+
 Vue.http.options.root = "http://stats.zomis.net:8078/games2";
+if (url.searchParams.get("server")) {
+  Vue.http.options.root =
+    "http://" + url.searchParams.get("server") + "/games2";
+}
+console.log("Using REST URL " + Vue.http.options.root);
+
 // Vue.http.headers.common["Authorization"] = "Basic XXXXXXXXX";
 
 export default new Router({
