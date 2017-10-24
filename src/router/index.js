@@ -12,7 +12,7 @@ import VueResource from "vue-resource";
 
 Vue.use(Router);
 Vue.use(VueResource);
-Vue.http.options.root = "http://127.0.0.1:8081/games2";
+Vue.http.options.root = "http://stats.zomis.net:8078/games2";
 // Vue.http.headers.common["Authorization"] = "Basic XXXXXXXXX";
 
 export default new Router({
