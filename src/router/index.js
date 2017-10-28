@@ -16,7 +16,7 @@ Vue.use(VueResource);
 
 var url = new URL(window.location.href);
 
-Vue.http.options.root = "http://stats.zomis.net:8078/games2";
+Vue.http.options.root = "http://gbg.zomis.net:8078/games2";
 if (url.searchParams.get("server")) {
   Vue.http.options.root =
     "http://" + url.searchParams.get("server") + "/games2";
