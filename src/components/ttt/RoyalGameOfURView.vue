@@ -182,7 +182,7 @@ export default {
 }
 
 .piece-flower {
-  background-color: #ffff00;
-  z-index: 0
+  background-image: url('../../assets/ur/flower.svg');
+  z-index: 1;
 }
 </style>
