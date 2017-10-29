@@ -6,9 +6,11 @@
     </div>
     <div class="awaiting-start" v-if="!summary.started">
       Game is not started yet.
+      <AIInviteComponent :playerConfig="null" :game="game" :gameId="id"></AIInviteComponent>
       <button @click="startGame()">Start game</button>
     </div>
     <div class="game flex" v-if="summary.started">
+      <button @click="aiMove()">Make AI Move (if there is an AI)</button>
       <component :is="view" :games="games" :gameId="id"
        :token="token" ></component>
     </div>
@@ -16,6 +18,8 @@
 </template>
 
 <script>
+import AIInviteComponent from "./AIInviteComponent";
+
 export default {
   name: "FlexGame",
   props: ["id", "token", "game", "view"],
@@ -26,6 +30,17 @@ export default {
     };
   },
   methods: {
+    aiMove: function() {
+      this.games.aiMove({ gameId: this.id }).then(
+        response => {
+          console.log(response.body);
+          this.fetchSummary();
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     startGame: function() {
       console.log("game id is " + this.id);
       this.games.start2({ gameId: this.id }).then(
@@ -53,6 +68,7 @@ export default {
     var customActions = {
       summary: { method: "GET", url: this.game + "{/gameId}" },
       join: { method: "POST", url: this.game + "{/gameId}/join" },
+      aiMove: { method: "GET", url: this.game + "{/gameId}/aiMove" },
       details: { method: "GET", url: this.game + "{/gameId}/details" },
       start2: { method: "POST", url: this.game + "/" + this.id + "/start" },
       action: {
@@ -63,7 +79,9 @@ export default {
     this.games = this.$resource(this.game, {}, customActions);
     this.fetchSummary();
   },
-  computed: {}
+  components: {
+    AIInviteComponent
+  }
 };
 </script>
 
