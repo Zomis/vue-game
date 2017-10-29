@@ -34,13 +34,19 @@ export default {
     GridView
   },
   methods: {
+    aiMoveAfterDelay: function() {
+      var self = this;
+      setTimeout(function() {
+        self.aiMove();
+      }, 1000);
+    },
     aiMove: function() {
       this.games.aiMove({ gameId: this.gameId }).then(
         response => {
           console.log(response.body);
           if (response.body.ok) {
             this.fetchDetails();
-            this.aiMove();
+            this.aiMoveAfterDelay();
           }
         },
         err => {
@@ -91,7 +97,7 @@ export default {
             console.log(response.body);
             this.fetchDetails();
             if (response.body.ok) {
-              this.aiMove();
+              this.aiMoveAfterDelay();
             }
           },
           err => {
