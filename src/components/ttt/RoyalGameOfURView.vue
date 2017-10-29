@@ -1,10 +1,13 @@
 <template>
   <div>
     <div>Current player is {{ currentPlayer }} steps to move: {{ stepsToMove }}</div>
-    <button :enabled="canPlaceNew" @click="action('move', 0)" class="placeNew">Place new</button>
-    <button :enabled="stepsToMove <= 0" @click="action('roll', {})" class="roll">Roll</button>
-    <div>Score: {{ posAt[0][15] }} vs. {{ posAt[1][15] }}. Remaining to be placed: {{ posAt[0][0] }} and {{ posAt[1][0] }}</div>
-    <GridView v-bind:width="8" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
+    <button @click="aiMove()">Make AI Move (if there is an AI)</button>
+    <div>
+      <button :enabled="canPlaceNew" @click="action('move', 0)" class="placeNew">Place new</button>
+      <button :enabled="stepsToMove <= 0" @click="action('roll', {})" class="roll">Roll</button>
+      <div>Score: {{ posAt[0][15] }} vs. {{ posAt[1][15] }}. Remaining to be placed: {{ posAt[0][0] }} and {{ posAt[1][0] }}</div>
+      <GridView v-bind:width="8" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
+    </div>
   </div>
 </template>
 
@@ -31,6 +34,20 @@ export default {
     GridView
   },
   methods: {
+    aiMove: function() {
+      this.games.aiMove({ gameId: this.gameId }).then(
+        response => {
+          console.log(response.body);
+          if (response.body.ok) {
+            this.fetchDetails();
+            this.aiMove();
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
     positionFor: function(x, y) {
       if (y === 1) {
         return 5 + x;
@@ -55,6 +72,14 @@ export default {
         name: player
       };
     },
+    fetchDetails: function() {
+      this.games.details({ gameId: this.gameId }).then(
+        response => {
+          this.details = response.body;
+        },
+        err => console.log(err)
+      );
+    },
     action: function(name, data) {
       this.games
         .action({ gameId: this.gameId, type: name, token: this.token }, data)
@@ -64,12 +89,10 @@ export default {
               "Action performed: " + name + ", " + JSON.stringify(data)
             );
             console.log(response.body);
-            this.games.details({ gameId: this.gameId }).then(
-              response => {
-                this.details = response.body;
-              },
-              err => console.log(err)
-            );
+            this.fetchDetails();
+            if (response.body.ok) {
+              this.aiMove();
+            }
           },
           err => {
             console.log(err);

@@ -10,7 +10,6 @@
       <button @click="startGame()">Start game</button>
     </div>
     <div class="game flex" v-if="summary.started">
-      <button @click="aiMove()">Make AI Move (if there is an AI)</button>
       <component :is="view" :games="games" :gameId="id"
        :token="token" ></component>
     </div>
@@ -30,17 +29,6 @@ export default {
     };
   },
   methods: {
-    aiMove: function() {
-      this.games.aiMove({ gameId: this.id }).then(
-        response => {
-          console.log(response.body);
-          this.fetchSummary();
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    },
     startGame: function() {
       console.log("game id is " + this.id);
       this.games.start2({ gameId: this.id }).then(
