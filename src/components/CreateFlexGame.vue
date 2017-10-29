@@ -10,7 +10,8 @@ export default {
   name: "CreateFlexGame",
   data() {
     return {
-      msg: "Create a game!"
+      msg:
+        "Create a game! Choose settings and stuff. Unless game is very simple, then this whole page is not needed at all!"
     };
   }
 };

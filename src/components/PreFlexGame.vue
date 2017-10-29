@@ -10,7 +10,7 @@ export default {
   name: "PreFlexGame",
   data() {
     return {
-      msg: "Prepare the game"
+      msg: "Wait for all players to join? Is this page really needed?"
     };
   }
 };
