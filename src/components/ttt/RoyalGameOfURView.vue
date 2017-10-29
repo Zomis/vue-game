@@ -144,16 +144,14 @@ export default {
     },
     pieces: function() {
       let result = [];
-      result.push({ x: 0, y: 0, name: "flower" });
-      result.push({ x: 6, y: 0, name: "flower" });
+      for (var i = 0; i <= 2; i += 2) {
+        result.push({ x: 0, y: i, name: "flower" });
+        result.push({ x: 6, y: i, name: "flower" });
+        result.push({ x: 4, y: i, name: "black" });
+        result.push({ x: 5, y: i, name: "exit" });
+      }
       result.push({ x: 3, y: 1, name: "flower" });
-      result.push({ x: 0, y: 2, name: "flower" });
-      result.push({ x: 6, y: 2, name: "flower" });
 
-      result.push({ x: 4, y: 0, name: "black" });
-      result.push({ x: 5, y: 0, name: "exit" });
-      result.push({ x: 4, y: 2, name: "black" });
-      result.push({ x: 5, y: 2, name: "exit" });
       let pieces = this.details.positions;
       for (var player = 0; player < pieces.length; player++) {
         for (var piece = 0; piece < pieces[player].length; piece++) {
