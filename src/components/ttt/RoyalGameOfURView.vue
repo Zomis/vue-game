@@ -151,9 +151,9 @@ export default {
       result.push({ x: 6, y: 2, name: "flower" });
 
       result.push({ x: 4, y: 0, name: "black" });
-      result.push({ x: 5, y: 0, name: "lime" });
+      result.push({ x: 5, y: 0, name: "exit" });
       result.push({ x: 4, y: 2, name: "black" });
-      result.push({ x: 5, y: 2, name: "lime" });
+      result.push({ x: 5, y: 2, name: "exit" });
       let pieces = this.details.positions;
       for (var player = 0; player < pieces.length; player++) {
         for (var piece = 0; piece < pieces[player].length; piece++) {
@@ -183,8 +183,10 @@ export default {
   background-color: #ffffff;
 }
 
-.piece-lime {
-  background-color: #00ff00;
+.piece-exit {
+  background-image: url('../../assets/ur/exit.svg');
+  width: 64px;
+  height: 32px;
 }
 
 .piece-flower {
