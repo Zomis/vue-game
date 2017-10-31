@@ -19,6 +19,7 @@ export default {
   props: ["games", "gameId", "token"],
   data() {
     return {
+      aiDelayStarted: false,
       details: { turn: 0, roll: 0, positions: [[], []] }
     };
   },
@@ -36,7 +37,12 @@ export default {
   methods: {
     aiMoveAfterDelay: function() {
       var self = this;
+      if (this.aiDelayStarted) {
+        return;
+      }
+      this.aiDelayStarted = true;
       setTimeout(function() {
+        self.aiDelayStarted = false;
         self.aiMove();
       }, 1000);
     },
