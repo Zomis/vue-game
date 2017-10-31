@@ -6,7 +6,7 @@
     </div>
     <div class="awaiting-start" v-if="!summary.started">
       Game is not started yet.
-      <AIInviteComponent :playerConfig="null" :game="game" :gameId="id"></AIInviteComponent>
+      <AIInviteComponent :playerConfig="null" :game="game" :gameId="id" v-on:invited="fetchSummary()"></AIInviteComponent>
       <button @click="startGame()">Start game</button>
     </div>
     <div class="game flex" v-if="summary.started">

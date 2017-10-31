@@ -22,6 +22,7 @@ export default {
         .then(
           response => {
             console.log(response.body);
+            this.$emit("invited");
           },
           err => {
             console.log(err);
