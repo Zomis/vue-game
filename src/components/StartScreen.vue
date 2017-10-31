@@ -19,6 +19,14 @@ export default {
       msg: "Choose your game"
     };
   },
+  beforeRouteLeave: function(to, from, next) {
+    if (this.name.length === 0) {
+      window.alert("You must enter a name.");
+      next(false);
+    } else {
+      next();
+    }
+  },
   created: function() {
     this.$http.get(".").then(
       response => {
