@@ -15,7 +15,7 @@ node {
     sh 'yarn build'
   }
   stage("Deploy") {
-    withCredentials([usernamePassword(credentialsId: '9dee6495-02c0-43e2-82b5-314bfffc3793', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+    withCredentials([usernamePassword(credentialsId: 'zomisnet-ftp', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       sh 'mv dist vue-game'
       sh 'ncftpput -R -v -u $USERNAME -p $PASSWORD www.zomis.net public_html/codereview vue-game'
     }
