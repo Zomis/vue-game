@@ -1,5 +1,9 @@
 <template>
-  <GridView v-bind:width="3" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
+  <div>
+    <div>Current player is {{ currentPlayer }}</div>
+    <button @click="aiMove()">Make AI Move (if there is an AI)</button>
+    <GridView v-bind:width="3" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
+  </div>
 </template>
 
 <script>
@@ -25,6 +29,40 @@ export default {
     GridView
   },
   methods: {
+    aiMoveAfterDelay: function() {
+      var self = this;
+      if (this.aiDelayStarted) {
+        return;
+      }
+      this.aiDelayStarted = true;
+      setTimeout(function() {
+        self.aiDelayStarted = false;
+        self.aiMove();
+      }, 1000);
+    },
+    aiMove: function() {
+      this.games.aiMove({ gameId: this.gameId }).then(
+        response => {
+          console.log(response.body);
+          if (response.body.ok) {
+            this.fetchDetails();
+            this.aiMoveAfterDelay();
+          }
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    },
+    fetchDetails: function() {
+      this.games.details({ gameId: this.gameId }).then(
+        response => {
+          this.details = response.body;
+        },
+        err => console.log(err)
+      );
+    },
+
     onClick: function(x, y) {
       console.log("OnClick in TTTView: " + x + ", " + y);
       this.games
@@ -36,12 +74,10 @@ export default {
           response => {
             console.log("Action performed: " + x + ", " + y);
             console.log(response.body);
-            this.games.details({ gameId: this.gameId }).then(
-              response => {
-                this.details = response.body;
-              },
-              err => console.log(err)
-            );
+            this.fetchDetails();
+            if (response.body.ok) {
+              this.aiMoveAfterDelay();
+            }
           },
           err => {
             console.log(err);
