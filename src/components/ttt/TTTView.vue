@@ -1,6 +1,7 @@
 <template>
   <div>
     <div>Current player is {{ currentPlayer }}</div>
+    <div>Scores is {{ details.scores[0] }} - {{ details.scores[1] }}</div>
     <button @click="aiMove()">Make AI Move (if there is an AI)</button>
     <GridView v-bind:width="3" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
   </div>
@@ -14,7 +15,7 @@ export default {
   props: ["games", "gameId", "token"],
   data() {
     return {
-      details: ""
+      details: { board: [[], [], []], scores: [0, 0] }
     };
   },
   created: function() {
@@ -90,7 +91,7 @@ export default {
       let result = [];
       for (var yy = 0; yy < 3; yy++) {
         for (var xx = 0; xx < 3; xx++) {
-          let row = this.details[yy];
+          let row = this.details.board[yy];
           if (!row) {
             console.log(
               "Missing " + yy + " for details " + JSON.stringify(this.details)
