@@ -4,6 +4,7 @@
     <div>Scores is {{ details.scores[0] }} - {{ details.scores[1] }}</div>
     <AIMixin @details="fetchDetails()" @aiBrain="v => updateAIBrain(v)" :games="games" :gameId="gameId" :lastMove="lastMove" />
     <GridView v-bind:width="3" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
+    <input type="checkbox" v-model="autoplay">autoplay</input>
   </div>
 </template>
 
@@ -16,6 +17,8 @@ export default {
   props: ["games", "gameId", "token"],
   data() {
     return {
+      autoplayDelayed: false,
+      autoplay: false,
       aiBrainData: [],
       lastMove: 0,
       details: { board: [[], [], []], scores: [0, 0] }
@@ -36,6 +39,17 @@ export default {
   methods: {
     updateAIBrain: function(data) {
       this.aiBrainData = data;
+      if (this.autoplay && !this.autoplayDelayed) {
+        this.autoplayDelayed = true;
+        console.log("Setting timeout for AI Brain at " + Date.now());
+        setTimeout(() => {
+          let max = data.reduce((a, b) => {
+            return a.score > b.score ? a : b;
+          });
+          this.onClick(max.action.actionData.x, max.action.actionData.y);
+          this.autoplayDelayed = false;
+        }, 3000);
+      }
     },
     fetchDetails: function() {
       this.games.details({ gameId: this.gameId }).then(
@@ -60,6 +74,8 @@ export default {
             this.fetchDetails();
             if (response.body.ok) {
               this.lastMove = Date.now(); // aiMoveAfterDelay();
+            } else {
+              this.lastMove = Date.now();
             }
           },
           err => {
