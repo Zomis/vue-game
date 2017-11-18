@@ -35,8 +35,6 @@ export default {
   },
   methods: {
     updateAIBrain: function(data) {
-      console.log("Braindata");
-      console.log(data);
       this.aiBrainData = data;
     },
     fetchDetails: function() {
@@ -49,7 +47,7 @@ export default {
     },
 
     onClick: function(x, y) {
-      console.log("OnClick in TTTView: " + x + ", " + y);
+      // console.log("OnClick in TTTView: " + x + ", " + y);
       this.games
         .action(
           { gameId: this.gameId, type: "move", token: this.token },
@@ -58,7 +56,7 @@ export default {
         .then(
           response => {
             console.log("Action performed: " + x + ", " + y);
-            console.log(response.body);
+            // console.log(response.body);
             this.fetchDetails();
             if (response.body.ok) {
               this.lastMove = Date.now(); // aiMoveAfterDelay();
@@ -72,8 +70,6 @@ export default {
   },
   computed: {
     currentPlayer: function() {
-      console.log(this.pieces);
-
       let pieceCount = this.pieces.filter(p => p.name !== "0").length;
       return pieceCount % 2;
     },
@@ -89,7 +85,7 @@ export default {
             return result;
           }
           let value = row[xx];
-          console.log("value at " + xx + ", " + yy + " is: " + value);
+          // console.log("value at " + xx + ", " + yy + " is: " + value);
           let overlays = this.aiBrainData
             .filter(
               bd => bd.action.actionData.x == xx && bd.action.actionData.y == yy

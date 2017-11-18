@@ -41,7 +41,6 @@ export default {
     aiBrain: function(aiName) {
       this.games.aiBrain({ gameId: this.gameId, aiName: aiName }).then(
         response => {
-          console.log(response.data);
           this.$emit("aiBrain", response.data);
         },
         err => console.log(err)
@@ -65,7 +64,7 @@ export default {
     aiMove: function() {
       this.games.aiMove({ gameId: this.gameId }).then(
         response => {
-          console.log(response.body);
+          // console.log(response.body);
           if (response.body.ok) {
             this.$emit("details");
             // this.fetchDetails();
