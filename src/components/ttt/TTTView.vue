@@ -65,6 +65,12 @@ export default {
     }
   },
   computed: {
+    currentPlayer: function() {
+      console.log(this.pieces);
+
+      let pieceCount = this.pieces.filter(p => p.name !== "0").length;
+      return pieceCount % 2;
+    },
     pieces: function() {
       let result = [];
       for (var yy = 0; yy < 3; yy++) {
