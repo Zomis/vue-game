@@ -1,8 +1,14 @@
 <template>
   <div class="ai-controller">
-    <button @click="aiMove()">Make AI Move (if there is an AI)</button>
+    <input type="checkbox" v-model="aiAutoMove">AI Moves automatically</input>
+    <br />
+    <label v-if="aiAutoMove" for="aiDelay">AI Delay</label>
+    <input v-if="aiAutoMove" name="aiDelay" v-model="aiDelay" />
+    <button v-if="!aiAutoMove" @click="aiMove()">Make AI Move (if there is an AI)</button>
+    <br />
     <input v-model="aiName" placeholder="AI name to query" />
     <button @click="aiBrain(aiName)">Check AI Scores</button>
+    <input type="checkbox" v-model="aiAutoQuery">Query AI automatically</input>
   </div>
 </template>
 <script>
@@ -14,6 +20,9 @@ export default {
 
   data() {
     return {
+      aiAutoQuery: false,
+      aiAutoMove: true,
+      aiDelay: "1000",
       aiName: "",
       aiDelayStarted: false
     };
@@ -21,6 +30,11 @@ export default {
   watch: {
     lastMove: function() {
       this.aiMoveAfterDelay();
+    },
+    aiAutoQuery: function() {
+      if (this.aiAutoQuery) {
+        this.aiBrain(this.aiName);
+      }
     }
   },
   methods: {
@@ -35,14 +49,18 @@ export default {
     },
     aiMoveAfterDelay: function() {
       var self = this;
-      if (this.aiDelayStarted) {
+      if (this.aiAutoQuery) {
+        this.aiBrain(this.aiName);
+      }
+      if (this.aiDelayStarted || !this.aiAutoMove) {
         return;
       }
+      let delay = parseInt(this.aiDelay) || 1000;
       this.aiDelayStarted = true;
       setTimeout(function() {
         self.aiDelayStarted = false;
         self.aiMove();
-      }, 1000);
+      }, delay);
     },
     aiMove: function() {
       this.games.aiMove({ gameId: this.gameId }).then(
