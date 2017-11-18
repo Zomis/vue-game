@@ -2,19 +2,21 @@
   <div>
     <div>Current player is {{ currentPlayer }}</div>
     <div>Scores is {{ details.scores[0] }} - {{ details.scores[1] }}</div>
-    <button @click="aiMove()">Make AI Move (if there is an AI)</button>
+    <AIMixin @details="fetchDetails()" :games="games" :gameId="gameId" :lastMove="lastMove" />
     <GridView v-bind:width="3" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
   </div>
 </template>
 
 <script>
 import GridView from "../views/GridView";
+import AIMixin from "./AIMixin";
 
 export default {
   name: "TTTView",
   props: ["games", "gameId", "token"],
   data() {
     return {
+      lastMove: 0,
       details: { board: [[], [], []], scores: [0, 0] }
     };
   },
@@ -27,34 +29,10 @@ export default {
     );
   },
   components: {
-    GridView
+    GridView,
+    AIMixin
   },
   methods: {
-    aiMoveAfterDelay: function() {
-      var self = this;
-      if (this.aiDelayStarted) {
-        return;
-      }
-      this.aiDelayStarted = true;
-      setTimeout(function() {
-        self.aiDelayStarted = false;
-        self.aiMove();
-      }, 1000);
-    },
-    aiMove: function() {
-      this.games.aiMove({ gameId: this.gameId }).then(
-        response => {
-          console.log(response.body);
-          if (response.body.ok) {
-            this.fetchDetails();
-            this.aiMoveAfterDelay();
-          }
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    },
     fetchDetails: function() {
       this.games.details({ gameId: this.gameId }).then(
         response => {
@@ -77,7 +55,7 @@ export default {
             console.log(response.body);
             this.fetchDetails();
             if (response.body.ok) {
-              this.aiMoveAfterDelay();
+              this.lastMove = Date.now(); // aiMoveAfterDelay();
             }
           },
           err => {
