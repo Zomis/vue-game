@@ -2,7 +2,7 @@
   <div>
     <div>Current player is {{ currentPlayer }}</div>
     <div>Scores is {{ details.scores[0] }} - {{ details.scores[1] }}</div>
-    <AIMixin @details="fetchDetails()" :games="games" :gameId="gameId" :lastMove="lastMove" />
+    <AIMixin @details="fetchDetails()" @aiBrain="v => updateAIBrain(v)" :games="games" :gameId="gameId" :lastMove="lastMove" />
     <GridView v-bind:width="3" v-bind:height="3" v-bind:pieces="pieces" v-bind:onClick="onClick"></GridView>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   props: ["games", "gameId", "token"],
   data() {
     return {
+      aiBrainData: [],
       lastMove: 0,
       details: { board: [[], [], []], scores: [0, 0] }
     };
@@ -33,6 +34,11 @@ export default {
     AIMixin
   },
   methods: {
+    updateAIBrain: function(data) {
+      console.log("Braindata");
+      console.log(data);
+      this.aiBrainData = data;
+    },
     fetchDetails: function() {
       this.games.details({ gameId: this.gameId }).then(
         response => {
@@ -84,10 +90,17 @@ export default {
           }
           let value = row[xx];
           console.log("value at " + xx + ", " + yy + " is: " + value);
+          let overlays = this.aiBrainData
+            .filter(
+              bd => bd.action.actionData.x == xx && bd.action.actionData.y == yy
+            )
+            .map(bd => bd.score)
+            .map(score => +score.toFixed(4));
           result.push({
             x: xx,
             y: yy,
-            name: value ? value.toLowerCase() : "0"
+            name: value ? value.toLowerCase() : "0",
+            overlays: overlays
           });
         }
       }

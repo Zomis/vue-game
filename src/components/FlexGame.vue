@@ -57,6 +57,10 @@ export default {
       summary: { method: "GET", url: this.game + "{/gameId}" },
       join: { method: "POST", url: this.game + "{/gameId}/join" },
       aiMove: { method: "GET", url: this.game + "{/gameId}/aiMove" },
+      aiBrain: {
+        method: "GET",
+        url: this.game + "{/gameId}/aiMoveDetails{/aiName}"
+      },
       details: { method: "GET", url: this.game + "{/gameId}/details" },
       start2: { method: "POST", url: this.game + "/" + this.id + "/start" },
       action: {

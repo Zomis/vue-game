@@ -1,7 +1,8 @@
 <template>
   <div class="ai-controller">
     <button @click="aiMove()">Make AI Move (if there is an AI)</button>
-
+    <input v-model="aiName" placeholder="AI name to query" />
+    <button @click="aiBrain(aiName)">Check AI Scores</button>
   </div>
 </template>
 <script>
@@ -13,6 +14,7 @@ export default {
 
   data() {
     return {
+      aiName: "",
       aiDelayStarted: false
     };
   },
@@ -22,6 +24,15 @@ export default {
     }
   },
   methods: {
+    aiBrain: function(aiName) {
+      this.games.aiBrain({ gameId: this.gameId, aiName: aiName }).then(
+        response => {
+          console.log(response.data);
+          this.$emit("aiBrain", response.data);
+        },
+        err => console.log(err)
+      );
+    },
     aiMoveAfterDelay: function() {
       var self = this;
       if (this.aiDelayStarted) {

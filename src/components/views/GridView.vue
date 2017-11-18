@@ -3,7 +3,11 @@
     <div class="gridview-inside" v-bind:style="{ width: (64*this.width) + 'px', height: (64*this.height) + 'px' }" >
       <div v-for="piece in pieces" class="piece" v-bind:class="['piece-' + piece.name]"
         v-bind:style="{ transform: 'translate(' + piece.x * 64 + 'px, ' + piece.y * 64 + 'px)' }"
-         v-on:click="click(piece.x, piece.y)"></div>
+         v-on:click="click(piece.x, piece.y)">
+         <div v-for="overlay in piece.overlays" class="overlay">
+           {{ overlay }}
+         </div>
+       </div>
 <!--      <div v-for="yy in this.height">
         <div v-for="xx in this.width" class="piece cellview"></div>
         <div v-bind:class="[piece.name]"
@@ -63,6 +67,10 @@ export default {
 
 .piece-o {
   background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PHBhdGggZD0iTTIyLjUgOWMtMi4yMSAwLTQgMS43OS00IDQgMCAuODkuMjkgMS43MS43OCAyLjM4QzE3LjMzIDE2LjUgMTYgMTguNTkgMTYgMjFjMCAyLjAzLjk0IDMuODQgMi40MSA1LjAzLTMgMS4wNi03LjQxIDUuNTUtNy40MSAxMy40N2gyM2MwLTcuOTItNC40MS0xMi40MS03LjQxLTEzLjQ3IDEuNDctMS4xOSAyLjQxLTMgMi40MS01LjAzIDAtMi40MS0xLjMzLTQuNS0zLjI4LTUuNjIuNDktLjY3Ljc4LTEuNDkuNzgtMi4zOCAwLTIuMjEtMS43OS00LTQtNHoiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==');
+}
+
+.overlay {
+  color: #ddf9fd
 }
 
 .piece-0 {
